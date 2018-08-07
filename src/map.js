@@ -186,3 +186,41 @@ function createCustomMarker( image ) {
 
   return holder;
 }
+
+  function GetCountryArray() {
+    let countryArray = [];
+    let request = new XMLHttpRequest();
+    let url = `https://node-data-generator.herokuapp.com/api/countries?n=1`;
+
+     request.onreadystatechange = function() {
+       if (this.readyState === 4 && this.status === 200) {
+         let response = JSON.parse(this.responseText);
+            // countryArray.push(response);
+            countryArray.push(GetLatLong(response));
+       }
+     }
+
+     request.open("GET", url, true);
+     request.send();
+
+     return countryArray;
+  }
+
+
+function GetLatLong(countryArray) {
+  let latLong = [];
+  let country = countryArray[0];
+  let request = new XMLHttpRequest();
+  let url = `https://restcountries.eu/rest/v2/name/${country}?fullText=true`;
+
+  request.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      let response = JSON.parse(this.responseText);
+      latLong.push(response[0].latlng);
+    }
+  }
+
+  request.open("GET", url, true);
+  request.send();
+  return latLong;
+}
