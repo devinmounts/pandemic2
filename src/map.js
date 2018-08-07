@@ -15,112 +15,7 @@ let geoCordArray = [[64.1353, -21.8952]];
 //     "longitude": -75.6979
 //   }
 // );
-let imageObjectArray = [ {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Brussels",
-  "latitude": 50.8371,
-  "longitude": 4.3676
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Copenhagen",
-  "latitude": 55.6763,
-  "longitude": 12.5681
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Paris",
-  "latitude": 48.8567,
-  "longitude": 2.3510
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Reykjavik",
-  "latitude": geoCordArray[0][0],
-  "longitude": -21.8952
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Moscow",
-  "latitude": 55.7558,
-  "longitude": 37.6176
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Madrid",
-  "latitude": 40.4167,
-  "longitude": -3.7033
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "London",
-  "latitude": 51.5002,
-  "longitude": -0.1262,
-  "url": "http://www.google.co.uk"
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Peking",
-  "latitude": 39.9056,
-  "longitude": 116.3958
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "New Delhi",
-  "latitude": 28.6353,
-  "longitude": 77.2250
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Tokyo",
-  "latitude": 35.6785,
-  "longitude": 139.6823,
-  "url": "http://www.google.co.jp"
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Ankara",
-  "latitude": 39.9439,
-  "longitude": 32.8560
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Buenos Aires",
-  "latitude": -34.6118,
-  "longitude": -58.4173
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Brasilia",
-  "latitude": -15.7801,
-  "longitude": -47.9292
-}, {
-  // "zoomLevel": 5,
-  // "scale": 0.5,
-  // "title": "Ottawa",
-  // "latitude": 45.4235,
-  // "longitude": -75.6979
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Kinshasa",
-  "latitude": -4.3369,
-  "longitude": 15.3271
-}, {
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Cairo",
-  "latitude": 30.0571,
-  "longitude": 31.2272
-},
-{
-  "zoomLevel": 5,
-  "scale": 0.5,
-  "title": "Pretoria",
-  "latitude": -25.7463,
-  "longitude": 28.1876
-} ];
+let imageObjectArray = [];
 
 imageObjectArray.push(
   {
@@ -210,8 +105,9 @@ function createCustomMarker( image ) {
   return holder;
 }
 
-  function GetInfo() {
-    // let latLngArray = [];
+  export function GetInfo() {
+    // debugger;
+    let latLngArray = [];
     let request = new XMLHttpRequest();
     let url = `https://node-data-generator.herokuapp.com/api/countries?n=1`;
 
@@ -219,19 +115,29 @@ function createCustomMarker( image ) {
        if (this.readyState === 4 && this.status === 200) {
          let response = JSON.parse(this.responseText);
             // countryArray.push(response);
-            geoCordArray.push(GetLatLong(response));
+            // latLngArray.push();
+            GetLatLong(response);
        }
      }
 
-     request.open("GET", url, true);
+     request.open("GET", url, false);
      request.send();
 
      // return latLngArray;
+     // imageObjectArray.push(
+     //   {
+     //     "zoomLevel": 5,
+     //     "scale": 0.5,
+     //     "title": "Pretoria",
+     //     "latitude": latLngArray[0][0],
+     //     "longitude": latLngArray[0][1]
+     //   }
+     // )
   }
 
 
-function GetLatLong(countryArray) {
-  let latLong = [];
+export function GetLatLong(countryArray) {
+  // let latLong = [];
   let country = countryArray[0];
   let request = new XMLHttpRequest();
   let url = `https://restcountries.eu/rest/v2/name/${country}?fullText=true`;
@@ -239,11 +145,18 @@ function GetLatLong(countryArray) {
   request.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
       let response = JSON.parse(this.responseText);
-      latLong.push(response[0].latlng);
+      imageObjectArray.push(
+        {
+          "zoomLevel": 5,
+          "scale": 0.5,
+          "title": "Pretoria",
+          "latitude": response[0].latlng[0],
+          "longitude": response[0].latlng[1]
+        });
     }
   }
 
   request.open("GET", url, true);
   request.send();
-  return latLong;
+  // return latLong;
 }
